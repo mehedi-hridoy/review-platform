@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import Link from "next/link";
+
 import api from "@/lib/api";
 
 import ProductCard from "@/components/ProductCard";
@@ -48,9 +50,18 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-100 p-10">
       <div className="mx-auto max-w-7xl">
-        <h1 className="mb-10 text-4xl font-bold">
-          Review Platform
-        </h1>
+        <div className="mb-10 flex items-center justify-between">
+          <h1 className="text-4xl font-bold">
+            Review Platform
+          </h1>
+
+          <Link
+            href="/admin"
+            className="rounded bg-gray-800 px-3 py-1 text-sm text-white transition hover:bg-black"
+          >
+            Manage Products
+          </Link>
+        </div>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (

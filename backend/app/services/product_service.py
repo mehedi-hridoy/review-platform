@@ -4,6 +4,10 @@ from sqlalchemy.orm import Session
 from app.models.product import Product
 from app.models.review import Review
 from sqlalchemy import select
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from app.models.user import User
 
 from app.schemas.product import ProductCreate
 class ProductService:
@@ -86,3 +90,16 @@ def delete_product(
     db.commit()
 
     return product
+
+class UserService:
+
+    @staticmethod
+    def get_all_users(
+        db: Session,
+    ):
+        statement = (
+            select(User)
+            .order_by(User.name)
+        )
+
+        return db.scalars(statement).all()

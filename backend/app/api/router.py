@@ -3,6 +3,8 @@ from fastapi import APIRouter
 from app.api.products import router as product_router
 from app.api.reviews import router as review_router
 
+from app.api.users import router as user_router
+
 router = APIRouter(prefix="/api")
 
 router.include_router(
@@ -13,4 +15,8 @@ router.include_router(
 router.include_router(
     review_router,
     tags=["Reviews"],
+)
+
+router.include_router(
+    user_router,
 )

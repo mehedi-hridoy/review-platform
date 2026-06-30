@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { createReview } from "@/lib/api";
+import { createReview, getUsers } from "@/lib/api";
+import { User } from "@/types/user";
 
 interface ReviewFormProps {
   productId: number;
@@ -13,12 +14,34 @@ export default function ReviewForm({
   productId,
   onSuccess,
 }: ReviewFormProps) {
-  const [userId, setUserId] = useState(1);
+  const [users, setUsers] = useState<User[]>([]);
+
+  const [userId, setUserId] = useState<number>(0);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const data = await getUsers();
+
+        setUsers(data);
+
+        if (data.length > 0) {
+          setUserId(data[0].id);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoadingUsers(false);
+      }
+    }
+
+    fetchUsers();
+  }, []);
 
   async function handleSubmit(
     e: React.FormEvent
@@ -36,17 +59,24 @@ export default function ReviewForm({
       });
 
       setComment("");
+      setRating(5);
 
       onSuccess();
     } catch (error) {
       console.error(error);
 
-      alert(
-        "Could not submit review."
-      );
+      alert("Could not submit review.");
     } finally {
       setLoading(false);
     }
+  }
+
+  if (loadingUsers) {
+    return (
+      <div className="mt-10">
+        Loading users...
+      </div>
+    );
   }
 
   return (
@@ -70,17 +100,14 @@ export default function ReviewForm({
           }
           className="w-full rounded border p-3 text-black"
         >
-          <option value={1}>
-            John Doe
-          </option>
-
-          <option value={2}>
-            Alice Smith
-          </option>
-
-          <option value={3}>
-            Bob Johnson
-          </option>
+          {users.map((user) => (
+            <option
+              key={user.id}
+              value={user.id}
+            >
+              {user.name}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -92,9 +119,7 @@ export default function ReviewForm({
         <select
           value={rating}
           onChange={(e) =>
-            setRating(
-              Number(e.target.value)
-            )
+            setRating(Number(e.target.value))
           }
           className="w-full rounded border p-3 text-black"
         >
@@ -118,9 +143,7 @@ export default function ReviewForm({
           rows={4}
           value={comment}
           onChange={(e) =>
-            setComment(
-              e.target.value
-            )
+            setComment(e.target.value)
           }
           className="w-full rounded border p-3 text-black"
           required
@@ -129,7 +152,7 @@ export default function ReviewForm({
 
       <button
         disabled={loading}
-        className="rounded bg-black px-6 py-3 text-white hover:bg-gray-800 disabled:opacity-50"
+        className="rounded bg-black px-6 py-3 text-white transition hover:bg-gray-800 disabled:opacity-50"
       >
         {loading
           ? "Submitting..."
