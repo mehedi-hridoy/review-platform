@@ -23,3 +23,15 @@ class ProductResponse(ProductBase):
 class ProductListResponse(ProductResponse):
     average_rating: float
     review_count: int
+
+
+class ReviewDetailResponse(BaseModel):
+    user: str
+    rating: int
+    comment: str
+
+
+class ProductDetailResponse(ProductResponse):
+    average_rating: float
+    review_count: int
+    reviews: list[ReviewDetailResponse]
