@@ -7,3 +7,7 @@ export interface Product {
   average_rating: number;
   review_count: number;
 }
+
+export interface ProductDetail extends Product {
+  reviews: import("./review").Review[];
+}
