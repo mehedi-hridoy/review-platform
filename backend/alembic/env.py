@@ -26,6 +26,10 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
+# Import the models so SQLAlchemy metadata is populated for Alembic autogeneration.
+# This should happen after Base is defined, but before target_metadata is used.
+import app.models  # noqa: F401
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
