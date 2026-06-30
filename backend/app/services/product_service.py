@@ -3,13 +3,9 @@ from sqlalchemy.orm import Session
 
 from app.models.product import Product
 from app.models.review import Review
-from sqlalchemy import select
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-
-from app.models.user import User
-
 from app.schemas.product import ProductCreate
+
+
 class ProductService:
 
     @staticmethod
@@ -32,6 +28,7 @@ class ProductService:
             .filter(Product.id == product_id)
             .first()
         )
+
     @staticmethod
     def create_product(
         db: Session,
@@ -70,36 +67,3 @@ class ProductService:
         db.commit()
 
         return product
-
-@staticmethod
-def delete_product(
-    db: Session,
-    product_id: int,
-):
-    statement = select(Product).where(
-        Product.id == product_id
-    )
-
-    product = db.scalar(statement)
-
-    if not product:
-        return None
-
-    db.delete(product)
-
-    db.commit()
-
-    return product
-
-class UserService:
-
-    @staticmethod
-    def get_all_users(
-        db: Session,
-    ):
-        statement = (
-            select(User)
-            .order_by(User.name)
-        )
-
-        return db.scalars(statement).all()

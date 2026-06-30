@@ -9,9 +9,12 @@ export default function RatingStars({
   size = "md",
   showValue = true,
 }: RatingStarsProps) {
-  const fullStars = Math.floor(rating);
-  const hasHalf = rating - fullStars >= 0.25 && rating - fullStars < 0.75;
-  const remaining = 5 - fullStars - (hasHalf ? 1 : 0);
+  // Guard against null/undefined/NaN rating values
+  const safeRating = typeof rating === "number" && !Number.isNaN(rating) ? rating : 0;
+
+  const fullStars = Math.floor(safeRating);
+  const hasHalf = safeRating - fullStars >= 0.25 && safeRating - fullStars < 0.75;
+  const remaining = Math.max(0, 5 - fullStars - (hasHalf ? 1 : 0));
 
   const starSize =
     size === "sm"
@@ -73,7 +76,7 @@ export default function RatingStars({
           className={`font-semibold tabular-nums ${valueSize}`}
           style={{ color: "var(--neutral-300)" }}
         >
-          {rating.toFixed(1)}
+          {safeRating.toFixed(1)}
         </span>
       )}
     </div>

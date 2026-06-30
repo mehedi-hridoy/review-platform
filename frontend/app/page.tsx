@@ -15,7 +15,7 @@ export default function Home() {
     async function fetchProducts() {
       try {
         const response = await api.get<Product[]>("/products");
-        setProducts(response.data);
+        setProducts(response.data ?? []);
       } catch (err) {
         console.error(err);
         setError("Failed to load products.");

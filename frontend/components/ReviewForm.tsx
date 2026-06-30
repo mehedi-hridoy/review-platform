@@ -22,17 +22,19 @@ export default function ReviewForm({
   const [hoverRating, setHoverRating] = useState(0);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [usersError, setUsersError] = useState(false);
 
   useEffect(() => {
     async function fetchUsers() {
       try {
         const data = await getUsers();
-        setUsers(data);
-        if (data.length > 0) {
+        setUsers(data ?? []);
+        if (data && data.length > 0) {
           setUserId(data[0].id);
         }
       } catch (error) {
         console.error(error);
+        setUsersError(true);
       } finally {
         setLoadingUsers(false);
       }
@@ -42,6 +44,13 @@ export default function ReviewForm({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!userId) {
+      setErrorMessage("Please select a user before submitting.");
+      setTimeout(() => setErrorMessage(""), 4000);
+      return;
+    }
+
     setLoading(true);
     setSuccessMessage("");
     setErrorMessage("");
@@ -63,9 +72,25 @@ export default function ReviewForm({
       }, 3000);
 
       onSuccess();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(error);
-      setErrorMessage("Could not submit review. Please try again.");
+
+      // Handle specific API error messages
+      let message = "Could not submit review. Please try again.";
+      if (
+        error &&
+        typeof error === "object" &&
+        "response" in error
+      ) {
+        const axiosError = error as { response?: { status?: number; data?: { detail?: string } } };
+        if (axiosError.response?.status === 409) {
+          message = "You have already reviewed this product.";
+        } else if (axiosError.response?.data?.detail) {
+          message = axiosError.response.data.detail;
+        }
+      }
+
+      setErrorMessage(message);
       setTimeout(() => setErrorMessage(""), 4000);
     } finally {
       setLoading(false);
@@ -79,6 +104,34 @@ export default function ReviewForm({
         <div className="skeleton h-12 w-full" />
         <div className="skeleton h-12 w-full" />
         <div className="skeleton h-24 w-full" />
+      </div>
+    );
+  }
+
+  // Handle case where users API failed or no users exist
+  if (usersError || users.length === 0) {
+    return (
+      <div
+        className="mt-10 flex flex-col items-center justify-center rounded-2xl py-10"
+        style={{
+          background: "var(--surface-1)",
+          border: "1px solid var(--border)",
+        }}
+      >
+        <div
+          className="mb-3 text-3xl"
+          style={{ color: "var(--neutral-700)" }}
+        >
+          ✍️
+        </div>
+        <p
+          className="text-sm"
+          style={{ color: "var(--neutral-500)" }}
+        >
+          {usersError
+            ? "Unable to load users. Please try again later."
+            : "No users available to submit reviews."}
+        </p>
       </div>
     );
   }

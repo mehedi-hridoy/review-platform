@@ -6,9 +6,12 @@ interface ReviewCardProps {
 }
 
 export default function ReviewCard({ review }: ReviewCardProps) {
+  // Guard against missing user name
+  const userName = review.user || "Anonymous";
+
   // Generate a consistent avatar color from the user's name
   const hue =
-    review.user
+    userName
       .split("")
       .reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360;
 
@@ -31,7 +34,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               border: `1px solid hsl(${hue}, 40%, 30%)`,
             }}
           >
-            {review.user.charAt(0).toUpperCase()}
+            {userName.charAt(0).toUpperCase()}
           </div>
 
           <div>
@@ -39,7 +42,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               className="text-sm font-semibold leading-tight"
               style={{ color: "var(--neutral-100)" }}
             >
-              {review.user}
+              {userName}
             </h3>
           </div>
         </div>
@@ -52,7 +55,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         className="text-[14px] leading-relaxed"
         style={{ color: "var(--neutral-400)" }}
       >
-        {review.comment}
+        {review.comment || "No comment provided."}
       </p>
     </div>
   );

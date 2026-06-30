@@ -47,15 +47,15 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.title}
         </h2>
 
-        <RatingStars rating={product.average_rating} size="sm" />
+        <RatingStars rating={product.average_rating ?? 0} size="sm" />
 
         <div className="flex items-center justify-between">
           <span
             className="text-[13px] font-medium"
             style={{ color: "var(--neutral-500)" }}
           >
-            {product.review_count}{" "}
-            {product.review_count === 1 ? "Review" : "Reviews"}
+            {product.review_count ?? 0}{" "}
+            {(product.review_count ?? 0) === 1 ? "Review" : "Reviews"}
           </span>
 
           <span

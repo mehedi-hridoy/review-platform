@@ -114,7 +114,7 @@ export default function ProductDetailsPage() {
           </h1>
 
           <div className="mb-4 flex items-center gap-3">
-            <RatingStars rating={product.average_rating} size="lg" />
+            <RatingStars rating={product.average_rating ?? 0} size="lg" />
             <span
               className="text-sm"
               style={{ color: "var(--neutral-500)" }}
@@ -125,8 +125,8 @@ export default function ProductDetailsPage() {
               className="text-sm"
               style={{ color: "var(--neutral-500)" }}
             >
-              {product.review_count}{" "}
-              {product.review_count === 1 ? "review" : "reviews"}
+              {product.review_count ?? 0}{" "}
+              {(product.review_count ?? 0) === 1 ? "review" : "reviews"}
             </span>
           </div>
 
@@ -155,11 +155,11 @@ export default function ProductDetailsPage() {
               className="ml-2 text-sm font-normal"
               style={{ color: "var(--neutral-500)" }}
             >
-              ({product.reviews.length})
+              ({(product.reviews ?? []).length})
             </span>
           </h2>
 
-          {product.reviews.length === 0 ? (
+          {(product.reviews ?? []).length === 0 ? (
             <div
               className="flex flex-col items-center justify-center rounded-2xl py-12"
               style={{
@@ -182,7 +182,7 @@ export default function ProductDetailsPage() {
             </div>
           ) : (
             <div className="space-y-3 stagger-children">
-              {product.reviews.map((review, index) => (
+              {(product.reviews ?? []).map((review, index) => (
                 <ReviewCard key={index} review={review} />
               ))}
             </div>

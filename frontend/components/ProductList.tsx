@@ -27,7 +27,7 @@ export default function ProductList({ refreshTrigger }: ProductListProps) {
       try {
         setLoading(true);
         const response = await api.get<Product[]>("/products");
-        setProducts(response.data);
+        setProducts(response.data ?? []);
         setError("");
       } catch (err) {
         console.error(err);
