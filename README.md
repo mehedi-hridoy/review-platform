@@ -5,7 +5,7 @@ A full-stack review platform built with **Next.js** (frontend) and **FastAPI** (
 ## Live Demo & Submission Links
 
 - GitHub Repository: https://github.com/mehedi-hridoy/review-platform
-- Live Frontend: https://review-platform-production.up.railway.app/
+- Live Frontend: https://zoological-harmony-production-d5aa.up.railway.app/
 - Live Backend API: https://review-platform-production.up.railway.app/
 - Swagger / API Docs: https://review-platform-production.up.railway.app/docs
 
