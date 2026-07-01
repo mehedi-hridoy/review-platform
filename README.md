@@ -2,6 +2,13 @@
 
 A full-stack review platform built with **Next.js** (frontend) and **FastAPI** (backend), backed by **PostgreSQL**.
 
+## Live Demo & Submission Links
+
+- GitHub Repository: https://github.com/mehedi-hridoy/review-platform
+- Live Frontend: https://review-platform-production.up.railway.app/
+- Live Backend API: https://review-platform-production.up.railway.app/
+- Swagger / API Docs: https://review-platform-production.up.railway.app/docs
+
 ## Tech Stack
 
 | Layer    | Technology                        |
@@ -21,6 +28,8 @@ A full-stack review platform built with **Next.js** (frontend) and **FastAPI** (
 - Admin panel: add and delete products
 - Responsive dark-themed UI
 - Proper loading skeletons and error/empty states
+- Additional API endpoint: `GET /api/users`
+- Admin page for product management at `/admin`
 
 ## Project Structure
 
