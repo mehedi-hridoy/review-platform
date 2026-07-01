@@ -12,9 +12,18 @@ from app.core.config import settings
 from app.database.base import Base
 config = context.config
 
+database_url = settings.DATABASE_URL
+
+if database_url.startswith("postgresql://"):
+    database_url = database_url.replace(
+        "postgresql://",
+        "postgresql+psycopg://",
+        1,
+    )
+
 config.set_main_option(
     "sqlalchemy.url",
-    settings.DATABASE_URL,
+    database_url,
 )
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

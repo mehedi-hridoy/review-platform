@@ -14,5 +14,17 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+@property
+def SQLALCHEMY_DATABASE_URL(self):
+    url = self.DATABASE_URL
+
+    if url.startswith("postgresql://"):
+        url = url.replace(
+            "postgresql://",
+            "postgresql+psycopg://",
+            1,
+        )
+
+    return url
 
 settings = Settings()
